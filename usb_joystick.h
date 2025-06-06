@@ -121,6 +121,46 @@ class usb_joystick_class
 		usb_joystick_data[1] = (usb_joystick_data[1] & 0xFFFFFFF0) | val;
                 if (!manual_mode) usb_joystick_send();
         }
+#elif JOYSTICK_SIZE == 14
+	void button(uint8_t button, bool val) {
+		if (--button >= 32) return;
+		if (val) usb_joystick_data[0] |= (1 << button);
+		else usb_joystick_data[0] &= ~(1 << button);
+		if (!manual_mode) usb_joystick_send();
+	}
+  void X(unsigned int val) {
+  	if (val > 1023) val = 1023;
+  	usb_joystick_data[1] = (usb_joystick_data[1] & 0xFFFFFC00) | (val << 0);
+  	if (!manual_mode) usb_joystick_send();
+  }
+  void Y(unsigned int val) {
+  	if (val > 1023) val = 1023;
+  	usb_joystick_data[1] = (usb_joystick_data[1] & 0xFFC003FF) | (val << 10);
+  	if (!manual_mode) usb_joystick_send();
+  }
+  void Z(unsigned int val) {
+  	if (val > 1023) val = 1023;
+  	usb_joystick_data[1] = (usb_joystick_data[1] & 0x003FFFFF) | (val << 20);
+  	if (!manual_mode) usb_joystick_send();
+  }
+  void Xrotate(unsigned int val) {
+  	if (val > 1023) val = 1023;
+  	// Insert bits 0–1 into bits 30–31 of word 1
+  	usb_joystick_data[1] = (usb_joystick_data[1] & 0x3FFFFFFF) | ((val & 0x03) << 30);
+  	// Insert bits 2–9 into bits 0–7 of word 2
+  	usb_joystick_data[2] = (usb_joystick_data[2] & 0xFFFFFF00) | ((val >> 2) & 0xFF);
+  	if (!manual_mode) usb_joystick_send();
+  }
+  void Yrotate(unsigned int val) {
+  	if (val > 1023) val = 1023;
+  	usb_joystick_data[2] = (usb_joystick_data[2] & 0xFFF003FF) | ((val & 0x03FF) << 8);
+  	if (!manual_mode) usb_joystick_send();
+  }
+  void Zrotate(unsigned int val) {
+  	if (val > 1023) val = 1023;
+  	usb_joystick_data[2] = (usb_joystick_data[2] & 0xFC03FFFF) | ((val & 0x03FF) << 18);
+  	if (!manual_mode) usb_joystick_send();
+  }
 #elif JOYSTICK_SIZE == 64
 	void button(unsigned int num, bool val) {
 		if (--num >= 128) return;
@@ -191,4 +231,3 @@ extern usb_joystick_class Joystick;
 #endif // JOYSTICK_INTERFACE
 
 #endif // USBjoystick_h_
-

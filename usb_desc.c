@@ -324,7 +324,7 @@ static uint8_t joystick_report_desc[] = {
         0x81, 0x02,                     //   Input (variable,absolute)
         0xC0                            // End Collection
 };
-#elif JOYSTICK_SIZE == 20
+#elif JOYSTICK_SIZE == 14
 // extreme joystick  (to use this, edit JOYSTICK_SIZE to 64 in usb_desc.h)
 //  128 buttons   16
 //    6 axes      12
