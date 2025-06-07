@@ -158,7 +158,7 @@ class usb_joystick_class
   }
   void Zrotate(unsigned int val) {
     if (val > 1023) val = 1023;
-    usb_joystick_data[2] = (usb_joystick_data[2] & 0xFC03FFFF) | (val << 18);
+    usb_joystick_data[2] = (usb_joystick_data[2] & 0xE01FFFFF) | (val << 18);
     if (!manual_mode) usb_joystick_send();
   }
   void sliderLeft(unsigned int val) {
@@ -171,7 +171,6 @@ class usb_joystick_class
   }
   void sliderRight(unsigned int val) {
   	if (val > 1023) val = 1023;
-  	// Insert into bits 6–15 of word 3
   	usb_joystick_data[3] = (usb_joystick_data[3] & 0xFFFF03FF) | ((val & 0x03FF) << 6);
   	if (!manual_mode) usb_joystick_send();
   }
