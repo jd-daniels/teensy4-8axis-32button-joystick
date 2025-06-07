@@ -157,8 +157,22 @@ class usb_joystick_class
   	if (!manual_mode) usb_joystick_send();
   }
   void Zrotate(unsigned int val) {
+    if (val > 1023) val = 1023;
+    usb_joystick_data[2] = (usb_joystick_data[2] & 0xFC03FFFF) | (val << 18);
+    if (!manual_mode) usb_joystick_send();
+  }
+  void sliderLeft(unsigned int val) {
   	if (val > 1023) val = 1023;
-  	usb_joystick_data[2] = (usb_joystick_data[2] & 0xFC03FFFF) | ((val & 0x03FF) << 18);
+  	// Bits 0–3 → bits 28–31 of word 2
+  	usb_joystick_data[2] = (usb_joystick_data[2] & 0x0FFFFFFF) | ((val & 0x0F) << 28);
+  	// Bits 4–9 → bits 0–5 of word 3
+  	usb_joystick_data[3] = (usb_joystick_data[3] & 0xFFFFFFC0) | ((val >> 4) & 0x3F);
+  	if (!manual_mode) usb_joystick_send();
+  }
+  void sliderRight(unsigned int val) {
+  	if (val > 1023) val = 1023;
+  	// Insert into bits 6–15 of word 3
+  	usb_joystick_data[3] = (usb_joystick_data[3] & 0xFFFF03FF) | ((val & 0x03FF) << 6);
   	if (!manual_mode) usb_joystick_send();
   }
 #elif JOYSTICK_SIZE == 64

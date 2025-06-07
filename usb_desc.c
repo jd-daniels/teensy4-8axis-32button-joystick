@@ -354,7 +354,7 @@ static uint8_t joystick_report_desc[] = {
   0x09, 0x34,        //   Usage (Ry)
   0x09, 0x35,        //   Usage (Rz)
   0x09, 0x36,        //   Usage (Slider)
-  0x09, 0x36,        //   Usage (Slider) again
+  0x09, 0x37,        //   Usage (Slider) again
   0x15, 0x00,        //   Logical Minimum (0)
   0x26, 0xFF, 0x03,  //   Logical Maximum (1023)
   0x75, 0x0A,        //   Report Size (10 bits)
